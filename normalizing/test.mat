@@ -1,0 +1,146 @@
+
+
+clear all;
+
+close all;
+
+​
+
+%% Setting eta = -theta - t0 (>0, positive values)
+
+theta = [0, -1, -2, -5];
+
+t0 = -1;
+
+​
+
+% p = 4;
+
+% theta = zeros(1,p);
+
+% for j=1:p
+
+%     theta(j) = (p-j)/(2*p);
+
+% end
+
+% t0 = -1;
+
+​
+
+eta = -theta - t0;
+
+​
+
+%% Value of c(0)
+
+p = length(theta);
+
+%c_zero = 2*pi^(p/2)/gamma(p/2);
+
+c_zero = 2*pi^(p/2);
+
+​
+
+%% (3) Numerical integration via the continuous Euler transform (without FFFT)
+
+​
+
+Nt_array = [10:10:200];
+
+Lt = length(Nt_array);
+
+c_theta_array = zeros(Lt,1);
+
+for l = 1:Lt
+
+    tic;
+
+    
+
+    Nt = Nt_array(l);
+
+    wd = 0.9;
+
+    wu = 2.2; % wu > 1.
+
+​
+
+    d = min(eta);
+
+    ht = sqrt(2*pi*d*(wd+wu)/(wd^2*Nt));
+
+    p = sqrt(Nt*ht/wd);
+
+    q = sqrt(wd*Nt*ht/4);
+
+    w = @(x) erfc(abs(x)/p-q)/2;
+
+​
+
+    s = ht*[-(Nt-1):Nt];
+
+    isp = invsqrtprod(s, eta);
+
+    I_CE = (ht/(2*pi)) * sum(isp .* exp(-1i*s) .* w(s));
+
+    I_CE = exp(log(c_zero * I_CE) - t0);
+
+​
+
+    c_theta_array(l) = I_CE;
+
+    
+
+    toc;
+
+end
+
+​
+
+format long;
+
+display(c_theta_array);
+
+​
+
+c_th_diff_array = zeros(Lt-1,1);
+
+for l = 1:(Lt-1)
+
+    c_th_diff_array(l) = c_theta_array(l) - c_theta_array(l+1);
+
+end
+
+display(c_th_diff_array);
+
+​
+
+% plot(Nt_array(1:Lt-1), log10(abs(c_th_diff_array)), '>--','Linewidth',2);
+
+exans = 4.2389501672;
+
+plot(Nt_array(1:Lt), log10(abs(c_theta_array - exans)), '>--','Linewidth',2);
+
+grid on;
+
+​
+
+%% Definitions of functions
+
+% [Function of the product in the integrand]
+
+function isp = invsqrtprod(s, eta)
+
+    Ls = length(s);
+
+    isp = zeros(1,Ls);
+
+    for l=1:Ls
+
+        isp(l) = 1/prod(sqrt(eta-s(l)*1i));
+
+    end
+
+end
+

@@ -1,0 +1,22 @@
+/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/functional.py:52: UserWarning: size_average and reduce args will be deprecated, please use reduction='sum' instead.
+  warnings.warn(warning.format(ret))
+Traceback (most recent call last):
+  File "test.py", line 206, in <module>
+    test_loss = test()
+  File "test.py", line 187, in test
+    x_sample, z_mu, z_var = model(x)
+  File "/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/modules/module.py", line 477, in __call__
+    result = self.forward(*input, **kwargs)
+  File "test.py", line 119, in forward
+    predicted = self.dec(x_sample)
+  File "/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/modules/module.py", line 477, in __call__
+    result = self.forward(*input, **kwargs)
+  File "test.py", line 94, in forward
+    predicted = torch.sigmoid(self.out(hidden))
+  File "/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/modules/module.py", line 477, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 55, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/meip-users/.pyenv/versions/anaconda3-4.0.0/lib/python3.7/site-packages/torch/nn/functional.py", line 1024, in linear
+    return torch.addmm(bias, input, weight.t())
+KeyboardInterrupt
